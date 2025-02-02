@@ -59,11 +59,14 @@ int loadMaze(const char* file) {
  */
 void initGL() {
     loadMaze("mapa1.txt");
+    glMatrixMode(GL_PROJECTION);
+    gluOrtho2D(0, maze->getCols(), maze->getRows(), 0);
 }
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(1.0f, 0.0f, 0.0f);
+    maze->draw();
     glFlush();
 }
 

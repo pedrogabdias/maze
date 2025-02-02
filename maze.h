@@ -9,8 +9,12 @@ public:
 
     Maze(unsigned int rows, unsigned int cols);
     ~Maze();
+
     void setCountTreasures(unsigned int countTreasures);
     unsigned int getCountTreasures() const;
+
+    int getRows() const;
+    int getCols() const;
 
     /**
      * Coleta um tesouro na posição especificada
@@ -18,6 +22,8 @@ public:
      * @return 1 se o tesouro foi coletado, 0 caso contrário
      */
     int collectTreasure(Position position);
+
+    void draw();
 private:
     unsigned int rows, cols, countTreasures;
 };
