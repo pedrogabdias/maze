@@ -1,5 +1,6 @@
 #include "maze.h"
 #include <stdlib.h>
+#include <GL/gl.h>
 
 Maze::Maze(int rows, int cols) {
     this->rows = rows;
@@ -27,8 +28,8 @@ int Maze::getCountTreasures() const {
 };
 
 int Maze::collectTreasure(Position position) {
-    if (this->grid[position.x][position.y] == '*' && this->countTreasures > 0) {
-        this->grid[position.x][position.y] = '0';
+    if (this->grid[position.y][position.x] == '*' && this->countTreasures > 0) {
+        this->grid[position.y][position.x] = '0';
         this->countTreasures--;
         return 1;
     }
@@ -44,8 +45,8 @@ int Maze::getCols() const {
 };
 
 void Maze::draw() {
-    for (unsigned int i = 0; i < this->rows; ++i) {
-        for (unsigned int j = 0; j < this->cols; ++j) {
+    for (int i = 0; i < this->rows; ++i) {
+        for (int j = 0; j < this->cols; ++j) {
             if (this->grid[i][j] == '*') {
                 glColor3f(1.0, 1.0, 0.0); // Amarelo
             } else if (this->grid[i][j] == '0') {
@@ -69,6 +70,7 @@ void Maze::draw() {
 void Maze::movePlayer(Position newPosition) {
     if (this->checkCollision(newPosition) == 0) {
         this->player.setPosition(newPosition);
+        this->collectTreasure(newPosition);
     }
 };
 
