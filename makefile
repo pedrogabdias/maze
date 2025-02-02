@@ -2,12 +2,12 @@
 # Exemplo de makefile para um projeto C++ com OpenGL/freeglut
 # Para simplificar, todos os arquivos estão em um mesmo diretório
 ##############################################################################
-# Arquivo principal: labirinto.cpp
+# Arquivo principal: main.cpp
 ##############################################################################
 
 
 # definição de variáveis auxiliares do makefile
-MAIN = src/labirinto
+MAIN = src/main
 OBJECTS	= $(MAIN).o
 FLAGS = -Wall -Wextra -std=c++23 -pedantic-errors -I./headers
 DEBUG = -g
