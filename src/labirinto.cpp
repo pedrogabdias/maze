@@ -58,7 +58,7 @@ int loadMaze(const char* file) {
  * Responsavel pela configuração inicial
  */
 void initGL() {
-    loadMaze("mapa1.txt");
+    loadMaze("assets/maps/mapa1.txt");
     glMatrixMode(GL_PROJECTION);
     gluOrtho2D(0, maze->getCols(), maze->getRows(), 0);
 }

@@ -7,9 +7,9 @@
 
 
 # definição de variáveis auxiliares do makefile
-MAIN = labirinto
+MAIN = src/labirinto
 OBJECTS	= $(MAIN).o
-FLAGS = -Wall -Wextra -std=c++23 -pedantic-errors
+FLAGS = -Wall -Wextra -std=c++23 -pedantic-errors -I./headers
 DEBUG = -g
 CC = g++
 
