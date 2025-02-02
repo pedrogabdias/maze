@@ -54,6 +54,30 @@ int loadMaze(const char* file) {
     return 0;
 };
 
+void keyboard(unsigned char key, int x, int y) {
+    Position newPlayerPosition = maze->player.getPosition();
+    switch (key) {
+        case 'w':
+            newPlayerPosition.y--;
+            maze->movePlayer(newPlayerPosition);
+            break;
+        case 's':
+            newPlayerPosition.y++;
+            maze->movePlayer(newPlayerPosition);
+            break;
+        case 'a':
+            newPlayerPosition.x--;
+            maze->movePlayer(newPlayerPosition);
+            break;
+        case 'd':
+            newPlayerPosition.x++;
+            maze->movePlayer(newPlayerPosition);
+            break;
+    }
+    cout << "Player position: " << maze->player.getPosition().x << " " << maze->player.getPosition().y << endl;
+    glutPostRedisplay();
+}
+
 /**
  * Responsavel pela configuração inicial
  */
@@ -77,6 +101,7 @@ int main (int argc, char** argv){
     glutDisplayFunc(display);
     initGL();
 
+    glutKeyboardFunc(keyboard);
     glutMainLoop();
 
     return 0;

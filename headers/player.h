@@ -1,13 +1,14 @@
 #pragma once
 
 typedef struct {
-    unsigned int x, y;	
+    int x, y;	
 } Position;
 
 class Player {
 public:
     void setPosition(Position position);
     Position getPosition() const;
+    void draw();
 private:
     Position position;
 };

@@ -7,11 +7,11 @@ public:
     char ** grid;
     Player player;
 
-    Maze(unsigned int rows, unsigned int cols);
+    Maze(int rows, int cols);
     ~Maze();
 
-    void setCountTreasures(unsigned int countTreasures);
-    unsigned int getCountTreasures() const;
+    void setCountTreasures(int countTreasures);
+    int getCountTreasures() const;
 
     int getRows() const;
     int getCols() const;
@@ -24,6 +24,10 @@ public:
     int collectTreasure(Position position);
 
     void draw();
+
+    void movePlayer(Position newPosition);
 private:
-    unsigned int rows, cols, countTreasures;
+    int rows, cols, countTreasures;
+
+    int checkCollision(Position position);
 };
