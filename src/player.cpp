@@ -1,4 +1,5 @@
 #include "player.h"
+#include <GL/gl.h>
 
 void Player::setPosition(Position position) {
     this->position = position;

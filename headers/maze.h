@@ -16,18 +16,18 @@ public:
     int getRows() const;
     int getCols() const;
 
+    void draw();
+
+    void movePlayer(Position newPosition);
+private:
+    int rows, cols, countTreasures;
+
     /**
      * Coleta um tesouro na posição especificada
      * @param position Posição do tesouro
      * @return 1 se o tesouro foi coletado, 0 caso contrário
      */
     int collectTreasure(Position position);
-
-    void draw();
-
-    void movePlayer(Position newPosition);
-private:
-    int rows, cols, countTreasures;
 
     int checkCollision(Position position);
 };
