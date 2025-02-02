@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 
+#define VELOCITY_OF_PLAYER_MS 150
+
 using namespace std;
 
 Maze * maze;
@@ -22,6 +24,14 @@ void renderText(float x, float y, const char* text) {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *text);
         text++;
     }
+}
+
+/**
+ * Habilita o movimento do player
+ */
+void enableMove(int value) {
+    canMove = true;
+    glutTimerFunc(VELOCITY_OF_PLAYER_MS, enableMove, 0); // atualizar a cada tempo
 }
 
 /**
@@ -70,7 +80,18 @@ int loadMaze(const char* file) {
     return 0;
 };
 
+/**
+ * Trata o evento de teclado
+ * @param key Tecla pressionada
+ * @param x Posição x do mouse
+ * @param y Posição y do mouse
+ */
 void keyboard(unsigned char key, int x, int y) {
+    if (!canMove) {
+        return;
+    } else {
+        canMove = false;
+    }
     Position newPlayerPosition = maze->player.getPosition();
     switch (key) {
         case 'w':
@@ -135,6 +156,7 @@ int main (int argc, char** argv){
     glutDisplayFunc(display);
     initGL();
 
+    glutTimerFunc(0, enableMove, 0);
     glutTimerFunc(0, timer, 0);
     glutKeyboardFunc(keyboard);
     glutMainLoop();
