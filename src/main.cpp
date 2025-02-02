@@ -9,8 +9,9 @@
 
 using namespace std;
 
-Maze * maze;
-int tempo = 0;
+Maze * maze; // Labirinto
+int tempo = 0; // Tempo de jogo
+bool canMove = true; // Variável para controlar o movimento do player
 
 /**
  * Renderiza um texto na tela
@@ -124,6 +125,9 @@ void initGL() {
     gluOrtho2D(0, maze->getCols(), maze->getRows(), 0);
 }
 
+/**
+ * Responsavel por renderizar a tela
+ */
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     if (maze->getCountTreasures() == 0) {
@@ -141,12 +145,15 @@ void display() {
     glFlush();
 }
 
+/**
+ * Atualiza o tempo
+ */
 void timer(int value) {
     if (maze->getCountTreasures() > 0) {
         tempo ++;
         glutPostRedisplay();
     }
-    glutTimerFunc(1000, timer, 0); // atualizar a cada s
+    glutTimerFunc(1000, timer, 0); // atualizar a cada segundo
 }
 
 int main (int argc, char** argv){
