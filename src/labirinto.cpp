@@ -9,6 +9,20 @@ using namespace std;
 Maze * maze;
 
 /**
+ * Renderiza um texto na tela
+ * @param x Posição x
+ * @param y Posição y
+ * @param text Texto a ser renderizado
+ */
+void renderText(float x, float y, const char* text) {
+    glRasterPos2f(x, y);
+    while (*text) {
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *text);
+        text++;
+    }
+}
+
+/**
  * Carrega o labirinto a partir de um arquivo
  * @param file Caminho do arquivo
  * @return 0 se o arquivo foi carregado com sucesso, 1 caso contrário
@@ -89,8 +103,14 @@ void initGL() {
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(1.0f, 0.0f, 0.0f);
-    maze->draw();
+    if (maze->getCountTreasures() == 0) {
+        glColor3f(1.0f, 1.0f, 0.0f);
+        renderText(maze->getCols()/2-1, maze->getRows()/2-2, "You Win!");
+        renderText(maze->getCols()/2-1, maze->getRows()/2-1, "Score:");
+        renderText(maze->getCols()/2-1, maze->getRows()/2, "Time:");
+    } else {
+        maze->draw();
+    }
     glFlush();
 }
 
