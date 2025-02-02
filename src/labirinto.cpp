@@ -3,10 +3,12 @@
 #include "player.cpp"
 #include <fstream>
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 Maze * maze;
+int tempo = 0;
 
 /**
  * Renderiza um texto na tela
@@ -107,11 +109,23 @@ void display() {
         glColor3f(1.0f, 1.0f, 0.0f);
         renderText(maze->getCols()/2-1, maze->getRows()/2-2, "You Win!");
         renderText(maze->getCols()/2-1, maze->getRows()/2-1, "Score:");
-        renderText(maze->getCols()/2-1, maze->getRows()/2, "Time:");
+        renderText(maze->getCols()/2-1, maze->getRows()/2, ("Time: " + to_string(tempo)).c_str());
     } else {
         maze->draw();
+        glColor3f(0.5f, 1.0f, 0.0f);
+        renderText(1, 0.8, ("Time: " + to_string(tempo)).c_str());
+        glColor3f(0.5f, 1.0f, 0.0f);
+        renderText(3, 0.8, ("Tesouros: " + to_string(maze->getCountTreasures())).c_str());
     }
     glFlush();
+}
+
+void timer(int value) {
+    if (maze->getCountTreasures() > 0) {
+        tempo ++;
+        glutPostRedisplay();
+    }
+    glutTimerFunc(1000, timer, 0); // atualizar a cada s
 }
 
 int main (int argc, char** argv){
@@ -121,6 +135,7 @@ int main (int argc, char** argv){
     glutDisplayFunc(display);
     initGL();
 
+    glutTimerFunc(0, timer, 0);
     glutKeyboardFunc(keyboard);
     glutMainLoop();
 
