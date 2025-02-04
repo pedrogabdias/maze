@@ -5,16 +5,15 @@
 #include <iostream>
 #include <string>
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "stb_image.hpp"
+#include "game.cpp"
 
 GLuint wallTexture;
 #define VELOCITY_OF_PLAYER_MS 150
 
 using namespace std;
 
-Maze * maze; // Labirinto
-int tempo = 0; // Tempo de jogo
-bool canMove = true; // Variável para controlar o movimento do player
+Game game;
 
 /**
  * Renderiza um texto na tela
@@ -34,55 +33,9 @@ void renderText(float x, float y, const char* text) {
  * Habilita o movimento do player
  */
 void enableMove(int value) {
-    canMove = true;
+    game.playerCanMove = true;
     glutTimerFunc(VELOCITY_OF_PLAYER_MS, enableMove, 0); // atualizar a cada tempo
 }
-
-/**
- * Carrega o labirinto a partir de um arquivo
- * @param file Caminho do arquivo
- * @return 0 se o arquivo foi carregado com sucesso, 1 caso contrário
- */
-int loadMaze(const char* file) {
-    unsigned int rows, cols;
-    std::ifstream input(file);
-
-    if (!input.is_open()) {
-        return 1;
-    }
-
-    input >> rows >> cols;
-    maze = new Maze(rows, cols);
-
-    Position playerPosition;
-    input >> playerPosition.x >> playerPosition.y;
-
-    maze->player.setPosition(playerPosition);
-
-    for (unsigned int i = 0; i < rows; ++i) {
-        for (unsigned int j = 0; j < cols; ++j) {
-            input >> maze->grid[i][j];
-            if (maze->grid[i][j] == '*') {
-                maze->setCountTreasures(maze->getCountTreasures() + 1);
-            }
-        }
-    }
-
-    cout << "Player position: " << maze->player.getPosition().x << " " << maze->player.getPosition().y << endl;
-    cout << "Treasures: " << maze->getCountTreasures() << endl;
-    cout << "Maze:" << endl;
-    cout << "----------------" << endl;
-
-    for (unsigned int i = 0; i < rows; ++i) {
-        for (unsigned int j = 0; j < cols; ++j) {
-            cout << maze->grid[i][j];
-        }
-        cout << endl;
-    }
-
-    input.close();
-    return 0;
-};
 
 GLuint loadTexture(const char* filename) {
     int width, height, nrChannels;
@@ -117,31 +70,30 @@ GLuint loadTexture(const char* filename) {
  * @param y Posição y do mouse
  */
 void keyboard(unsigned char key, int x, int y) {
-    if (!canMove) {
+    if (!game.playerCanMove) {
         return;
     } else {
-        canMove = false;
+        game.playerCanMove = false;
     }
-    Position newPlayerPosition = maze->player.getPosition();
+    Position newPlayerPosition = game.maze->player.getPosition();
     switch (key) {
         case 'w':
             newPlayerPosition.y--;
-            maze->movePlayer(newPlayerPosition);
+            game.maze->movePlayer(newPlayerPosition);
             break;
         case 's':
             newPlayerPosition.y++;
-            maze->movePlayer(newPlayerPosition);
+            game.maze->movePlayer(newPlayerPosition);
             break;
         case 'a':
             newPlayerPosition.x--;
-            maze->movePlayer(newPlayerPosition);
+            game.maze->movePlayer(newPlayerPosition);
             break;
         case 'd':
             newPlayerPosition.x++;
-            maze->movePlayer(newPlayerPosition);
+            game.maze->movePlayer(newPlayerPosition);
             break;
     }
-    cout << "Player position: " << maze->player.getPosition().x << " " << maze->player.getPosition().y << endl;
     glutPostRedisplay();
 }
 
@@ -149,9 +101,9 @@ void keyboard(unsigned char key, int x, int y) {
  * Responsavel pela configuração inicial
  */
 void initGL() {
-    loadMaze("assets/maps/mapa1.txt");
+    game.start("assets/maps/mapa5.txt");
     glMatrixMode(GL_PROJECTION);
-    gluOrtho2D(0, maze->getCols(), maze->getRows(), 0);
+    gluOrtho2D(0, game.maze->getCols(), game.maze->getRows(), 0);
     wallTexture = loadTexture("assets/textures/parede_3.jpg"); // Realiza a leitura da textura
     glEnable(GL_TEXTURE_2D); // Habilitar texturas 2D
 }
@@ -162,17 +114,17 @@ void initGL() {
 void display() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Define o fundo preto
     glClear(GL_COLOR_BUFFER_BIT);
-    if (maze->getCountTreasures() == 0) {
+    if (game.maze->getCountTreasures() == 0) {
         glColor3f(1.0f, 1.0f, 0.0f);
-        renderText(maze->getCols()/2-1, maze->getRows()/2-2, "You Win!");
-        renderText(maze->getCols()/2-1, maze->getRows()/2-1, "Score:");
-        renderText(maze->getCols()/2-1, maze->getRows()/2, ("Time: " + to_string(tempo)).c_str());
+        renderText(game.maze->getCols()/2-1, game.maze->getRows()/2-2, "You Win!");
+        renderText(game.maze->getCols()/2-1, game.maze->getRows()/2-1, "Score:");
+        renderText(game.maze->getCols()/2-1, game.maze->getRows()/2, ("Time: " + to_string(game.tempo)).c_str());
     } else {
-        maze->draw(wallTexture);
+        game.maze->draw(wallTexture);
         glColor3f(1.0f, 1.0f, 1.0f);
-        renderText(1, 0.8, ("Time: " + to_string(tempo)).c_str());
+        renderText(1, 0.8, ("Time: " + to_string(game.tempo)).c_str());
         glColor3f(1.0f, 1.0f, 1.0f);
-        renderText(3, 0.8, ("Tesouros: " + to_string(maze->getCountTreasures())).c_str());
+        renderText(3, 0.8, ("Tesouros: " + to_string(game.maze->getCountTreasures())).c_str());
         glColor3f(1.0f, 1.0f, 1.0f);
     }
     glFlush();
@@ -182,8 +134,8 @@ void display() {
  * Atualiza o tempo
  */
 void timer(int value) {
-    if (maze->getCountTreasures() > 0) {
-        tempo ++;
+    if (game.maze->getCountTreasures() > 0) {
+        game.tempo ++;
         glutPostRedisplay();
     }
     glutTimerFunc(1000, timer, 0); // atualizar a cada segundo
