@@ -58,39 +58,51 @@ void drawCircle(float cx, float cy, float radius, int segments) {
     glEnd();
 }
 
-void Maze::draw() {
-    // Definindo o fundo branco
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Branco (RGBA)
-    glClear(GL_COLOR_BUFFER_BIT);        // Limpando o buffer de cor
+void Maze::draw(GLuint wallTexture) {
+    // Define o fundo branco
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); 
+    glClear(GL_COLOR_BUFFER_BIT);        
+
     for (int i = 0; i < this->rows; ++i) {
-        for (int j = 0; j < this->cols; ++j) {
-            if (this->grid[i][j] == '*') {
-                glColor3f(1.0, 1.0, 0.0); // Amarelo
+        for (int j = 0; j < this->cols; ++j) { 
+            if (this->grid[i][j] == '1') {
+                // Aplicação da textura na parede
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, wallTexture);
 
-                // Desenhar os tesouros como circulos
-                float centerX = j + 0.5f; // Centralizar no bloco
-                float centerY = i + 0.5f;
-                float radius = 0.25f;      // Tamanho da bolinha
-                drawCircle(centerX, centerY, radius, 30);
-
-            } else {
-                if (this->grid[i][j] == '0') {
-                    glColor3f(1.0, 1.0, 1.0); // Branco
-                } else {
-                    glColor3f(0.0, 0.0, 0.0); // Preto
-                }
-
-                // Desenhar o quadrado
                 glBegin(GL_QUADS);
-                glVertex2f(j, i);
-                glVertex2f(j + 1, i);
-                glVertex2f(j + 1, i + 1);
-                glVertex2f(j, i + 1);
+                    glTexCoord2f(0.0f, 0.0f); glVertex2f(j, i);
+                    glTexCoord2f(1.0f, 0.0f); glVertex2f(j + 1, i);
+                    glTexCoord2f(1.0f, 1.0f); glVertex2f(j + 1, i + 1);
+                    glTexCoord2f(0.0f, 1.0f); glVertex2f(j, i + 1);
+                glEnd();
+
+                glBindTexture(GL_TEXTURE_2D, 0); // Desvincula a textura
+                glDisable(GL_TEXTURE_2D);        // Desativa texturas para os próximos elementos
+            } 
+            else if (this->grid[i][j] == '*') {
+                // Tesouro (círculo amarelo)
+                glColor3f(1.0f, 1.0f, 0.0f); // Amarelo
+                float centerX = j + 0.5f;
+                float centerY = i + 0.5f;
+                float radius = 0.25f;      
+                drawCircle(centerX, centerY, radius, 30);
+                glColor3f(1.0f, 1.0f, 1.0f); // Redefine a cor para branco
+            }
+            else if (this->grid[i][j] == '0') {
+                // Espaço vazio
+                glColor3f(1.0f, 1.0f, 1.0f); // Branco
+                glBegin(GL_QUADS);
+                    glVertex2f(j, i);
+                    glVertex2f(j + 1, i);
+                    glVertex2f(j + 1, i + 1);
+                    glVertex2f(j, i + 1);
                 glEnd();
             }
         }
     }
 
+    // Desenhar o jogador
     this->player.draw();
 }
 

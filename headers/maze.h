@@ -16,7 +16,7 @@ public:
     int getRows() const;
     int getCols() const;
 
-    void draw();
+    void draw(GLuint wallTexture);
 
     void movePlayer(Position newPosition);
 private:
