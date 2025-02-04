@@ -156,10 +156,16 @@ void timer(int value) {
     glutTimerFunc(1000, timer, 0); // atualizar a cada segundo
 }
 
+void reshape(int w, int h) {
+    // Defina o tamanho fixo da janela
+    glutReshapeWindow(800, 600);
+}
+
 int main (int argc, char** argv){
     glutInit(&argc, argv);
     glutInitWindowSize(800, 600);
     glutCreateWindow("Labirinto");
+    glutReshapeFunc(reshape);
     glutDisplayFunc(display);
     initGL();
 
