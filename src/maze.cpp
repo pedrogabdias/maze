@@ -7,7 +7,7 @@
 Maze::Maze(int rows, int cols) {
     this->rows = rows;
     this->cols = cols;
-
+    this->countTreasures = 0;
     this->grid = (char **) malloc(rows * sizeof(char *));
     for (int i = 0; i < cols; ++i) {
         this->grid[i] = (char *) malloc(cols * sizeof(char));
