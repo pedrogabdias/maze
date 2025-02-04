@@ -1,4 +1,4 @@
-#include "player.h"
+#include "player.hpp"
 #include <GL/gl.h>
 #include <cmath> 
 #define M_PI 3.14159265358979323846

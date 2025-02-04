@@ -1,4 +1,4 @@
-#include "maze.h"
+#include "maze.hpp"
 #include <stdlib.h>
 #include <GL/gl.h>
 #include <math.h>
