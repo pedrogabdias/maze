@@ -1,6 +1,8 @@
 #include "maze.h"
 #include <stdlib.h>
 #include <GL/gl.h>
+#include <math.h>
+#define M_PI 3.14159265358979323846
 
 Maze::Maze(int rows, int cols) {
     this->rows = rows;
@@ -44,28 +46,53 @@ int Maze::getCols() const {
     return this->cols;
 };
 
+void drawCircle(float cx, float cy, float radius, int segments) {
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex2f(cx, cy); // Centro do círculo
+    for (int i = 0; i <= segments; i++) {
+        float angle = 2.0f * M_PI * i / segments;
+        float x = cx + radius * cos(angle);
+        float y = cy + radius * sin(angle);
+        glVertex2f(x, y);
+    }
+    glEnd();
+}
+
 void Maze::draw() {
+    // Definindo o fundo branco
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // Branco (RGBA)
+    glClear(GL_COLOR_BUFFER_BIT);        // Limpando o buffer de cor
     for (int i = 0; i < this->rows; ++i) {
         for (int j = 0; j < this->cols; ++j) {
             if (this->grid[i][j] == '*') {
                 glColor3f(1.0, 1.0, 0.0); // Amarelo
-            } else if (this->grid[i][j] == '0') {
-                glColor3f(1.0, 1.0, 1.0); // Branco
-            } else {
-                glColor3f(0.0, 0.0, 0.0); // Preto
-            }
 
-            glBegin(GL_QUADS);
-            glVertex2f(j, i);
-            glVertex2f(j + 1, i);
-            glVertex2f(j + 1, i + 1);
-            glVertex2f(j, i + 1);
-            glEnd();
+                // Desenhar os tesouros como circulos
+                float centerX = j + 0.5f; // Centralizar no bloco
+                float centerY = i + 0.5f;
+                float radius = 0.25f;      // Tamanho da bolinha
+                drawCircle(centerX, centerY, radius, 30);
+
+            } else {
+                if (this->grid[i][j] == '0') {
+                    glColor3f(1.0, 1.0, 1.0); // Branco
+                } else {
+                    glColor3f(0.0, 0.0, 0.0); // Preto
+                }
+
+                // Desenhar o quadrado
+                glBegin(GL_QUADS);
+                glVertex2f(j, i);
+                glVertex2f(j + 1, i);
+                glVertex2f(j + 1, i + 1);
+                glVertex2f(j, i + 1);
+                glEnd();
+            }
         }
     }
 
     this->player.draw();
-};
+}
 
 void Maze::movePlayer(Position newPosition) {
     if (this->checkCollision(newPosition) == 0) {
