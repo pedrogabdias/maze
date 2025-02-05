@@ -9,14 +9,19 @@ Game::Game() {
 }
 
 void Game::start(const char * file) {
-    this->gameStarted = true;
-    if (this->loadMaze(file) == 1) {
-        this->end();
+    if (this->loadMaze(file)) {
+        this->gameStarted = true;
+        glLoadIdentity();
+        gluOrtho2D(0, this->maze->getCols(), this->maze->getRows(), 0);
+        this->tempo = 0;
+        this->playerCanMove = true;
     }
 }
 
 void Game::end() {
     this->gameStarted = false;
+    glLoadIdentity();
+    gluOrtho2D(0, 10, 10, 0);
     delete this->maze;
 }
 
@@ -25,7 +30,7 @@ int Game::loadMaze(const char* file) {
     std::ifstream input(file);
 
     if (!input.is_open()) {
-        return 1;
+        return 0;
     }
 
     input >> rows >> cols;
@@ -45,5 +50,5 @@ int Game::loadMaze(const char* file) {
         }
     }
 
-    return 0;
+    return 1;
 }

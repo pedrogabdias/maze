@@ -4,7 +4,7 @@
 class Game {
 public:
     Maze * maze;
-    unsigned int tempo;
+    int tempo;
     bool playerCanMove;
     bool gameStarted;
 
@@ -17,8 +17,7 @@ private:
     /**
      * Carrega o labirinto a partir de um arquivo
      * @param file Caminho do arquivo
-     * @return 0 se o arquivo foi carregado com sucesso, 1 caso contrário
+     * @return 1 se o arquivo foi carregado com sucesso, 0 caso contrário
      */
     int loadMaze(const char* file);
-
 };
