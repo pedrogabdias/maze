@@ -37,21 +37,21 @@ Desenvolver uma aplicação em OpenGL que modele um labirinto em 2D representado
 2. *Windows*
     - Instalar o VSCode e as extensôes C/C++ e CMake Tools 
     - Instalar o msys2 para atualizar o compilador gcc para ultima versão
-    - Atualizar o msys2:
+    - Atualizar o msys2: <br><br>
     ```sh
     pacman -Suy
     ```
     - Reiniciar o terminal msys2
-    - Dar o comando novamente:
+    - Dar o comando novamente:<br><br>
     ```sh
     pacman -Suy
     ```
-    - Instalar os pacotes de desenvolvimento e a freeglut
+    - Instalar os pacotes de desenvolvimento e a freeglut <br><br>
     ```sh
     pacman -S --needed base-devel mingw-w64-x86_64-toolchain
     pacman -S mingw-w64-x86_64-freeglut
     ```
-    - Adicionar ao Path do windows:
+    - Adicionar ao Path do windows: <br><br>
      ```sh
     C:\msys64\mingw64\bin
     C:\msys64\mingw64\include
@@ -61,30 +61,27 @@ Desenvolver uma aplicação em OpenGL que modele um labirinto em 2D representado
       <br> <br>
     - Instalar o vcpkg
 	  - Realizar um git clone (git clone https://github.com/Microsoft/vcpkg.git) ou baixar direto do github (https://github.com/Microsoft/vcpkg/) para alguma pasta do seu sistema. Exemplo -> c:\vcpkg\
-	  - Executar o arquivo bat da pasta "vcpkg"
+	  - Executar o arquivo bat da pasta "vcpkg" <br><br>
      ```sh
     .\vcpkg\bootstrap-vcpkg.bat
     ```
-	  - Instalar o Freeglut
+	  - Instalar o Freeglut <br><br>
     ```sh
     vcpkg install freeglut
     ```
-	  - Linkar a pasta de instalação de pacotes do VCPKG ao VSCode
+	  - Linkar a pasta de instalação de pacotes do VCPKG ao VSCode <br><br>
      ```sh
     vcpkg integrate install
     ```
 	  - Após isto, todos os pacotes instalados com o VCPKG serão automaticamente reconhecidos pelo Intellisense.
   
 ## Compilação e Execução
-1. *Compilar o Projeto*
-    ```sh
-    make
-    ```
-2. *Executar o Projeto*
-    ```sh
+1. *Compilar e Executar o Projeto*
+   
+   ```sh
     make run
     ```
-3. *Limpar Arquivos Compilados*
+2. *Limpar Arquivos Compilados* <br>
     ```sh
     make clean
     ```
