@@ -1,5 +1,7 @@
 #include "game.hpp"
 #include <fstream>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 Game::Game() {
     this->maze = nullptr;
